@@ -32,16 +32,14 @@ Run `php artisan vendor:publish --provider="AddPay\Wrapper\Client\AddPayServiceP
 
 ## Configuratiion
 
-Edit `app/config/addpay-client.php` and add your `app secret` and `app key`.
+Edit `app/config/addpay-client.php` and add your `app key` and `app secret`.
 
 ## Get Payment Methods
 
 ```
-$client = new \AddPay\Client\AddPayHttpClient();
-$client->setAppKey('key')
-       ->setAppSecret('secret');
+use AddPay\Wrapper\Client\Facades\AddPay;
 
-$request = $client->getPaymentMethods();
+$request = AddPay::getPaymentMethods();
 ```
 
 ## Prepare Payment
@@ -49,11 +47,9 @@ $request = $client->getPaymentMethods();
 See addPay integration documentation on the required parameters in the data block.
 
 ```
-$client = new \AddPay\Client\AddPayHttpClient();
-$client->setAppKey('key')
-       ->setAppSecret('secret');
+use AddPay\Wrapper\Client\Facades\AddPay;
 
-$request = $client->preparePayment([
+$request = AddPay::preparePayment([
       ...
       'trans_amount'   => '500.00',
       'trans_method'   => 'METH_PAYMENT_CARD_STD',
@@ -69,7 +65,9 @@ When the request is completed, an `AddPayResult` object is returned. In some cas
 ### Ensure the request succeeded
 
 ```
-$request = $client->getPaymentMethods();
+use AddPay\Wrapper\Client\Facades\AddPay;
+
+$request = AddPay::getPaymentMethods();
 
 if ($request->succeeds()) {
      $response = $request->payload;
@@ -81,7 +79,9 @@ if ($request->succeeds()) {
 ### Handle failed request
 
 ```
-$request = $client->getPaymentMethods();
+use AddPay\Wrapper\Client\Facades\AddPay;
+
+$request = AddPay::getPaymentMethods();
 
 if ($request->fails()) {
      $error = $request->error;
