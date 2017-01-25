@@ -1,0 +1,22 @@
+{
+    "name": "addpay/addpay-laravel-client",
+    "type": "library",
+    "license": "MIT",
+    "authors": [{
+        "name": "Stephen Lake",
+        "email": "stephen-lake@live.com",
+        "homepage": "https://github.com/stephenlake",
+        "role": "Developer"
+    }],
+    "description": "addPay Http Client",
+    "keywords": ["addpay", "client"],
+    "require": {
+        "php": ">=7.0.0",
+        "addpay/addpay-php-client": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "AddPay\\Wrapper\\Client\\": "src/"
+        }
+    }
+}
