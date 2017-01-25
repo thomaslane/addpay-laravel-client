@@ -1,4 +1,4 @@
-![AddPay Logo](http://i.imgur.com/jPCaBUK.png "ShopKit Logo")
+![AddPay Logo](http://i.imgur.com/jPCaBUK.png "AddPay Logo")
 
 ## Installation
 
