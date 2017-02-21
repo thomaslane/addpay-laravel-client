@@ -4,7 +4,7 @@
 
 ## Require the package
 
-`composer require addpay/addpay-php-client --prefer-dist`.
+`composer require addpay/addpay-laravel-client --prefer-dist`.
 
 ### Inject Service Provider & Publish package configuration files**
 
