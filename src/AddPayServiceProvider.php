@@ -21,4 +21,6 @@ class AddPayServiceProvider extends ServiceProvider
     {
         return ['addpay'];
     }
+    
+    public function register() {};
 }
