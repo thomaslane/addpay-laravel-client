@@ -6,7 +6,12 @@ use Illuminate\Support\ServiceProvider;
 
 class AddPayServiceProvider extends ServiceProvider
 {
-    public function boot()
+    public function provides()
+    {
+        return ['addpay'];
+    }
+    
+    public function register() 
     {
         $this->app->bind('addpay', function ($app) {
             return new AddPay();
@@ -15,12 +20,5 @@ class AddPayServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/Config/addpay-client.php' => config_path('addpay-client.php'),
         ]);
-    }
-
-    public function provides()
-    {
-        return ['addpay'];
-    }
-    
-    public function register() {};
+    };
 }
