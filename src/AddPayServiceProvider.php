@@ -20,5 +20,5 @@ class AddPayServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/Config/addpay-client.php' => config_path('addpay-client.php'),
         ]);
-    };
+    }
 }
