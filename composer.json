@@ -12,7 +12,7 @@
     "keywords": ["addpay", "client"],
     "require": {
         "php": ">=7.0.0",
-        "addpay/addpay-php-client": "dev-master"
+        "addpay/addpay-php-client": "^0.1"
     },
     "autoload": {
         "psr-4": {
