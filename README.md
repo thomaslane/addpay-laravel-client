@@ -37,9 +37,27 @@ Edit `app/config/addpay-client.php` and add your `app key` and `app secret`.
 ## Get Payment Methods
 
 ```
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\RequestException;
 use AddPay\Wrapper\Client\Facades\AddPay;
 
-$request = AddPay::getPaymentMethods();
+try {
+        $result = AddPay::getPaymentMethods();
+
+        echo $result->getStatusCode();
+        echo $result->getBody();
+}
+catch (RequestException $e) {
+        echo $e->getMessage();
+} catch (ConnectException $e) {
+        echo $e->getMessage();
+} catch (ClientException $e) {
+         echo $e->getMessage();
+} catch (\Exception $e) {
+        echo $e->getMessage();
+}
 ```
 
 ## Prepare Payment
@@ -48,53 +66,48 @@ See addPay integration documentation on the required parameters in the data bloc
 
 ```
 use AddPay\Wrapper\Client\Facades\AddPay;
+use AddPay\Client\AddPayClient;
+use AddPay\Client\Containers\Transaction\Transaction;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\RequestException;
+  
+$transaction = new Transaction();
+$transaction->setPayerFirstname('<payer-firstname>');
+$transaction->setPayerLastname('<payer-lastname>');
+$transaction->setPayerEmail('foobar@example.org');
+$transaction->setMethod('METH_PAYMENT_CARD_STD'); // see getPaymentMethods()
+$transaction->setAmountValue('<amount-in-cents>');
+$transaction->setAmountCurrency('<currency-iso>');
+$transaction->setAppReturnUrl('<app-return-url>');
+$transaction->setAppNotifyUrl('<app-notification-url>');
+$transaction->setApiMode('<live/test>');
 
-$request = AddPay::preparePayment([
-      ...
-      'trans_amount'   => '500.00',
-      'trans_method'   => 'METH_PAYMENT_CARD_STD',
-      'trans_currency' => 'USD',
-      ...
-  ]);
+try {
+    $result = AddPay::setAppId('<your-app-id>');
+                    ->setAppSecret('<your-app-secret>')
+                    ->submitTransaction($transaction);
+
+    echo $result->getStatusCode();
+    echo $result->getBody();
+}
+catch (RequestException $e) {
+    echo $e->getMessage();
+} catch (ConnectException $e) {
+    echo $e->getMessage();
+} catch (ClientException $e) {
+    echo $e->getMessage();
+} catch (\Exception $e) {
+    echo $e->getMessage();
+}
 ```
 
 ## Result Handling
 
-When the request is completed, an `AddPayResult` object is returned. In some cases you may experience errors, in these events, an `AddPayResult` object is created which contains the error code, error message and in the event of a caught exception, the exception will be included - Using the `AddPayResult` object is quite straight forward.
+The result of an HTTP call will always be returned in a Guzzle PSR7 Stream object allowing you full control over the handling of the result in instances where the response is not a `200` or `201`. To retreive the object content call `getBody()` on the response which will by default return JSON unless otherwise specified. HTTP status codes may be checked with `getStatusCode()` where anything other than `200` and `201` is an error which respects standard HTTP response codes:
 
-### Ensure the request succeeded
+Most common response codes:
 
-```
-use AddPay\Wrapper\Client\Facades\AddPay;
-
-$request = AddPay::getPaymentMethods();
-
-if ($request->succeeds()) {
-     $response = $request->payload;
-     
-     // do something with your response
-}
-```
-
-### Handle failed request
-
-```
-use AddPay\Wrapper\Client\Facades\AddPay;
-
-$request = AddPay::getPaymentMethods();
-
-if ($request->fails()) {
-     $error = $request->error;
-     
-     $error_message = $error->desc;
-     $error_code    = $error->code;
-     
-     // do something with your error
-     
-     if (isset($error->exception)) {
-         $exception = $error->exception;
-         
-         // do something with your exception
-     }
-}
-```
+- `403` Forbidden - Check your App ID and App Secret
+- `422` Unprocessable Entity - Either an invalid parameter has been passed through or one or more are missing
