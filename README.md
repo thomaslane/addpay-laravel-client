@@ -105,9 +105,13 @@ catch (RequestException $e) {
 
 ## Result Handling
 
+When working with card transactions, the addPay hosted payment page must be used, if the payment preparation was successful, the `status` block will contain a `redirect` field containing the URL that the payer should be redirected to, from there onward addPay will handle the transaction process according to the payload provided by you.
+
+Other types of transactions such as `bank transfer` may be processed immediately and do not required any further input, the `state` field inside the `status` object will identify which transaction types need further processing where `processed` indicates that not further processing is required.
+
 The result of an HTTP call will always be returned in a Guzzle PSR7 Stream object allowing you full control over the handling of the result in instances where the response is not a `200` or `201`. To retreive the object content call `getBody()` on the response which will by default return JSON unless otherwise specified. HTTP status codes may be checked with `getStatusCode()` where anything other than `200` and `201` is an error which respects standard HTTP response codes:
 
 Most common response codes:
 
 - `403` Forbidden - Check your App ID and App Secret
-- `422` Unprocessable Entity - Either an invalid parameter has been passed through or one or more are missing
+- `422` Unprocessable Entity - Either an invalid parameter has been passed through or one or more are missing.
