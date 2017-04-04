@@ -10,6 +10,7 @@
     }],
     "description": "addPay Http Client",
     "keywords": ["addpay", "client"],
+    "minimum-stability": "dev",
     "require": {
         "php": ">=7.0.0",
         "addpay/addpay-php-client": "dev-master"
